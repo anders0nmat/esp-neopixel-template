@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Licht</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="index.css">
+	<link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+</head>
+<body>
+	<h2>Color:</h2>
+	<div class="hlist">
+		<div class="color-field">
+			<div>
+				<div class="color-selected"></div>
+				<div class="color-new"></div>
+			</div>
+			<div class="color-picker vlist">
+				<div class="hlist hfill hue-sat">
+					<div class="color-saturation">
+						<svg class="selector">
+							<circle cx="8" cy="8" r="8" fill="#fff" stroke-width="2" stroke="#000"/>
+							<circle class="inner-circle" cx="8" cy="8" r="6" fill="var(--new-color)" stroke-width="2" stroke="#fff"/>
+						</svg>
+					</div>
+					
+					<div class="color-hue">
+						<svg class="selector">
+							<rect x="0" y="0" rx="2" ry="2" width="34" height="14" fill="#000"/>
+							<rect x="1.5" y="1.5" rx="1" ry="1" width="31" height="11" fill="#fff"/>
+							<rect class="inner-rect" x="3" y="3" rx="0.5" ry="0.5" width="28" height="8" fill="hsl(var(--hue), 100%, 50%)"/>
+						</svg>
+					</div>
+				</div>
+				<div class="color-preview hlist">
+					<div class="center button" onclick="exitPicker(false)">⮌</div>
+					<div class="center color-text-container">
+						<div class="color-text">
+							HSL 0 100% 100%
+						</div>
+					</div>
+					<div class="center button">⭳</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="index.js"></script>
+</body>
+</html>

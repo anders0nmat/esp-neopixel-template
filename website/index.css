@@ -1,0 +1,192 @@
+* {
+	box-sizing: border-box;
+}
+
+.color-field {
+	--selected-color: #000;
+	--new-color: hsl(var(--hue), calc(var(--sat) * 100%), calc(var(--lig) * 100%));
+	--text-contrast-color: #fff;
+	position: relative;
+	font-family: "Open Sans", "Segoe UI", sans-serif;
+}
+
+.color-field > div:first-child {
+	border: 2px solid #0002;
+	border-radius: 50%;
+	width: 50px;
+	height: 50px;
+	overflow: hidden;
+	padding: 0;
+	position: relative;
+	transform-origin: 50%;
+	
+	margin: 10px;
+	transition: transform 0.25s ease-in-out;
+}
+
+.color-field > div:first-child:hover {
+	transform: scale(1.05);
+}
+
+.color-field > div:first-child .color-new {
+	background-color: var(--new-color, red);
+	/* border-radius: 25px 0 0 25px; */
+	width: 50%;
+	height: 100%;
+	position: absolute;
+	left: 50%;
+	top: 0;
+	box-sizing: border-box;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.color-field > div:first-child .color-selected {
+	background-color: var(--selected-color, blue);
+	/* background-color: var(--selected-color, red); */
+	/* border-radius: 25px 0 0 25px; */
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	box-sizing: border-box;
+	/* display: none; */
+	pointer-events: none;
+}
+
+.color-field .color-picker {
+	position: absolute;
+	top: 110%;
+	border: thin solid gray;
+	border-radius: 10px;
+	padding: 8px 16px;
+	opacity: 0;
+	transition: opacity 0.15s;
+	touch-action: none;
+}
+
+.color-field.show .color-picker {
+	opacity: 1;
+}
+
+.color-field.show .color-new {
+	opacity: 1 !important;
+}
+
+.color-picker h4 {
+	margin: 0;
+	text-align: center;
+	font-weight: 700;
+	letter-spacing: 1pt;
+}
+
+.color-picker .color-preview {
+	background-color: var(--new-color);
+	width: 100%;
+	height: 25px;
+	border-radius: 4px;
+	color: var(--text-contrast-color);
+	padding: 2px 8px;
+	cursor: default;
+	user-select: none;
+}
+
+.color-preview *.color-text-container {
+	text-align: center;
+	word-spacing: 5pt;
+	flex: 1;
+	font-size: 11pt;
+}
+
+.color-preview * {
+	flex: 0;
+}
+
+.vlist.color-picker > * {
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
+.color-saturation {
+	--color-hue: red;
+	aspect-ratio: 1 / 1;
+	min-width:200px;
+	flex: 20 0 200px;
+	margin-right: 8px;
+	background:
+		linear-gradient(to bottom, transparent 5%, #000 95%),
+		linear-gradient(to right, #fff 5%, hsl(var(--hue), 100%, 50%) 95%);
+	border-radius: 4px;
+	position: relative;
+}
+
+.color-saturation .selector {
+	position: absolute;
+	top: -8px;
+	left: -8px;
+	width: 16px;
+	height: 16px;
+	transform: translate(10.5px, 10.5px);
+	overflow: visible;
+	/* padding: 2px; */
+	will-change: transform;
+	pointer-events: none;
+}
+
+.color-hue {
+	min-width: 30px;
+	min-height: 200px;
+	margin-left: 8px;
+	background: #000 linear-gradient(to bottom,
+		#FF0000 0%, #FFFF00 16.666%,
+		#00FF00 33.333%, #00FFFF 50%,
+		#0000FF 66.666%, #FF00FF 83.333%,
+		#FF0000 100%
+	);
+	border-radius: 4px;
+	position: relative;
+}
+
+.color-hue .selector {
+	position: absolute;
+	top: -2px;
+	left: -2px;
+	width: 34px;
+	height: 16px;
+	pointer-events: none;
+}
+
+.hlist {
+	display: flex;
+	flex-flow: row nowrap;
+}
+
+.hfill {
+	justify-content: stretch;
+	align-items: stretch;
+	width:100%;
+}
+
+.vlist {
+	display: flex;
+	flex-flow: column;
+	align-items: center;
+}
+
+.center {
+	display: flex;
+	flex-flow: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.button {
+	background: transparent;
+	border-radius: 4px;
+	padding: 0 4px;
+}
+
+.button:hover {
+	background: #7f7f7f70;
+	cursor: pointer;
+}
