@@ -10,6 +10,92 @@
 #define _debugline(x)
 #endif
 
+
+std::vector<uint8_t> b64_to_byte(std::string b64, std::string lastChars) {
+	const std::string b64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" + lastChars + "=";
+	std::vector<uint8_t> result;
+
+	b64.erase(std::remove(b64.begin(), b64.end(), '\n'), b64.end());
+	b64.erase(std::remove(b64.begin(), b64.end(), '\r'), b64.end());
+
+	if (std::count(b64.begin(), b64.end(), '=') == 0) {
+		switch (b64.size() % 4) {
+		case 1: return result;
+		case 2:
+			b64 += "==";
+			break;
+		case 3:
+			b64 += "=";
+			break;
+		case 0:
+		default:
+			break;
+		}
+	}
+
+	size_t b64_len = b64.size() / 4;
+	if (b64.find_first_not_of(b64_chars) != std::string::npos) return result;
+	if (b64.size() % 4 != 0) return result;
+
+	for (size_t i = 0; i < b64_len; i++) {
+		char c1 = b64[i * 4 + 0];
+		char c2 = b64[i * 4 + 1];
+		char c3 = b64[i * 4 + 2];
+		char c4 = b64[i * 4 + 3];
+		uint32_t data = (b64_chars.find(c1) & 0x3F) << 18; // 0x3F mask for first 6 Bits
+		data |= (b64_chars.find(c2) & 0x3F) << 12;
+		data |= (b64_chars.find(c3) & 0x3F) << 6;
+		data |= (b64_chars.find(c4) & 0x3F) << 0;
+		result.push_back((data >> 16) & 0xFF);
+		if (c3 != '=') {
+			result.push_back((data >> 8) & 0xFF);
+		}
+		if (c4 != '=') {
+			result.push_back((data >> 0) & 0xFF);
+		}
+	}
+
+	return result;	
+}
+
+std::string byte_to_b64(std::vector<uint8_t> bytes, std::string lastChars) {
+	const std::string b64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" + lastChars;
+	std::string result = "";
+	
+	size_t byte_triples = bytes.size() / 3;
+	for (size_t i = 0; i < byte_triples; i++) {
+		uint32_t data = (bytes[i * 3 + 0] << 16) | (bytes[i * 3 + 1] << 8) | (bytes[i * 3 + 2] << 0);
+		result += b64_chars[(data >> 18) & 0x3F];
+		result += b64_chars[(data >> 12) & 0x3F];
+		result += b64_chars[(data >> 6) & 0x3F];
+		result += b64_chars[(data >> 0) & 0x3F];
+	}
+
+	switch (bytes.size() % 3) {
+	case 1: {
+		uint32_t data = bytes[bytes.size() - 1] << 4; // to get 2 6-bit fields (8 bit + 4 = 12)
+		result += b64_chars[(data >> 6) & 0x3F];
+		result += b64_chars[(data >> 0) & 0x3F];
+		result += "==";
+		break;
+	}
+	case 2: {
+		uint32_t data = (bytes[bytes.size() - 2] << 10) | (bytes[bytes.size() - 1] << 2);
+		result += b64_chars[(data >> 12) & 0x3F];
+		result += b64_chars[(data >> 6) & 0x3F];
+		result += b64_chars[(data >> 0) & 0x3F];
+		result += "=";
+		break;
+	}
+	case 0:
+	default:
+		break;
+	}
+	
+	return result;
+}
+
+
 NeoContainer::NeoContainer(std::vector<uint8_t>::iterator & buf, const std::vector<uint8_t>::iterator end) {
 	status = status_ok;
 	if (std::distance(buf, end) < 15) {

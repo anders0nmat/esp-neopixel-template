@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 #include <NeoPixelBus.h>
 #include <NeoPixelAnimator.h>
 
@@ -96,6 +97,8 @@ public:
 
 	CmdResult binaryCommand(std::vector<uint8_t> & msg);
 
+	CmdResult b64Command(std::string b64);
+
 	void clearTo(T_COLOR color);
 
 	void update();
@@ -108,3 +111,6 @@ public:
 
 	void toggle();
 };
+
+std::vector<uint8_t> b64_to_byte(std::string b64, std::string lastChars = "+/");
+std::string byte_to_b64(std::vector<uint8_t> bytes, std::string lastChars = "+/");
